@@ -40,8 +40,8 @@ class Tags {
                 <tbody>
                     <tr id='ztagsheader'>
                         <th id='ztag'>Tag</th>
-                        <th id='ztmobile'>Mobile?</th>
-                        <th id='ztemail'>Email?</th>
+                        <th id='ztmobile'>Mobile</th>
+                        <th id='ztemail'>Email</th>
                     </tr>
 
                         

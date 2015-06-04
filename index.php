@@ -1,6 +1,13 @@
 <!-- index.php  -->
 <?php 
 
+    session_start ();
+    if (! array_key_exists ('err', $_SESSION)) {
+
+        $_SESSION ['err'] = '';
+
+    } // end if (! array_key_exists ('err', $_SESSION))
+    
     get_header(); 
     require_once 'Topics.php';
     require_once 'User.php';
@@ -11,23 +18,25 @@
     $atxcc_us = new User ();
     $atxcc_tg = new Tags ();
 
-    $siteUrl = site_url ();
+    $requestUrl = $_SERVER ['REQUEST_URI'];
 
-    $siteHome = preg_replace ('/https?:\/\/.*?\/(.*)/', '$1', $siteUrl);
-    // echo "$siteHome", '<br />';
+        // pick off trailing ?0, if present
+    if (preg_match ('/([^?]+)\?(.*)$/', $requestUrl, $matches)) {
+
+
+        $requestUrl = $matches [1];
+        $optionSuffix = $matches [2];
+
+        if ($optionSuffix == '0') {
+
+            $_SESSION ['err'] = '';
+
+        } // end if ($suffix == '0')
+        
+
+    } // end if (preg_match ('/([^?]+)\?(.*)$/', $requestUrl, $matches))
     
-    $url = $_SERVER ['REQUEST_URI'];
-    // echo "$url", '<br />';
-
-        // string suffix of request uri
-    $request = preg_replace ('/.*?' . $siteHome . '(.*)/', '$1', $url);
-
-        // remove trailing '/', if present
-    $request = preg_replace ('/\/?$/', '', $request);
-    //echo "'$request'", '<br />';
-
-
-    // var_dump ($_SERVER);
+    $request = preg_replace ('/.*\//', "", $requestUrl);
 
     switch ($request) {
 
@@ -36,15 +45,15 @@
             $atxcc_tp -> topicsInit ();
             break;
 
-        case '/signup':
+        case 'signup':
             $atxcc_us->signupForm ($_SESSION ['err']);
             break;
 
-        case '/alogin':
+        case 'alogin':
             $atxcc_us->loginForm ($_SESSION ['err']);
             break;
 
-        case '/alogout':
+        case 'alogout':
             $atxcc_us->logout ();
 
             $server = $_SERVER ['SERVER_NAME'];
@@ -53,7 +62,11 @@
             Util::redirect ($urlRedirect);
             break;
 
-        case '/tags':
+        case 'apassword':
+            $atxcc_us->changePasswordForm ($_SESSION ['err']);
+            break;
+
+        case 'tags':
             $atxcc_tg->tagsInit ();
             break;
 

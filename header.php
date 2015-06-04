@@ -1,7 +1,5 @@
 <?php    // header.php
 
-session_start ();
-
 require_once 'User.php';
 $atxcc_us = new User ();
 
@@ -46,15 +44,26 @@ $atxcc_us = new User ();
                         ?>
                             <li class='zmenu'> <a href='<?php echo site_url ();?>/tags'>Tags</a> </li>
                             <li class='zmenu'> <a href='<?php echo site_url ();?>/alogout'>Log out</a> </li>
-                            <li class='zmenu'><a id='zuser' name='<?php echo $atxcc_us->username; ?>'href='<?php echo site_url ();?>'><?php echo 'Hello ' . $atxcc_us->username; ?></a> </li>
+                            <!--li class='zmenu'><a id='zuser' name='<?php echo $atxcc_us->username; ?>'href='<?php echo site_url ();?>'><?php echo 'Hello ' . $atxcc_us->username; ?></a> </li-->
+                            <li class='dropdown'>
+                                <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+                                    <?php echo 'Hello ' . $atxcc_us->username; ?>
+                                    <span class="caret"></span>
+                                    <ul class='dropdown-menu'>
+                                        <li class='zmenu'> <a href='<?php echo site_url ();?>/apassword'>Change Password</a> </li>
+                                    </ul>
+                                </a>
+                            <li class='zmenu'><a id='zuser' name='<?php echo $atxcc_us->username; ?>'href='<?php echo site_url ();?>'>
+                            </a> </li>
+                            </li>
                         <?php
                         
 
                     } else {
 
                         ?>
-                            <li class='zmenu'> <a href='<?php echo site_url ();?>/signup'>Sign up</a> </li>
-                            <li class='zmenu'> <a href='<?php echo site_url ();?>/alogin'>Log in</a> </li>
+                            <li class='zmenu'> <a href='<?php echo site_url ();?>/signup?0'>Sign up</a> </li>
+                            <li class='zmenu'> <a href='<?php echo site_url ();?>/alogin?0'>Log in</a> </li>
                         <?php
                         
 

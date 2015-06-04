@@ -117,6 +117,46 @@ public function loginForm ($err_msg) {
 
 
 //---------------------
+public function changePasswordForm ($err_msg) {
+
+    ?>
+    <div id="zpassword" class="row">
+        <div class="col-sm-4">
+        <?php
+            if ($err_msg) {
+
+                echo '<p style="color:red">' . $err_msg . '</p>';
+
+            } // end if ($err_msg)
+            
+        ?>
+            <form id="zchangepasswordform" class="well" method='post' action='<?php echo get_template_directory_uri();?>/changepassword.php'>
+                <label>
+                    Change Password
+                </label>
+                <br>
+                <label>
+                    New Password
+                </label>
+                <br>
+                <input id="zpassword" type="password" placeholder="new password" name="password" autofocus/>
+                <br>
+                <label>
+                    Confirm Password
+                </label>
+                <br>
+                <input id="zconfirmpassword" type="password" placeholder="confirm password" name="cpassword"/>
+                <input type="submit" value="ChangePassword" class="btn btn-default btn-xs btn-success" style="margin-left: 100px; margin-top: 10px"/>
+            </form>
+        </div>
+    </div>
+    <?php
+
+} // end changePasswordForm ()
+
+
+
+//---------------------
 public function logout () {
 
     $this->isLoggedIn = false;
@@ -182,6 +222,33 @@ public function doAuth ($username, $password) {
     return $authenticate;
 
 } // end public function authenticate ()
+
+
+
+//---------------------
+public function changePassword ($user, $newpassword) {
+
+    $db = new Database ('tgregone_atxcc', 'tgregone_atxcc', 'tgregone_atxcc$', 'localhost');
+    
+    $query = "SELECT acval FROM ac_data WHERE actype='user' AND ackey=?";
+    $row = $db -> doQueryRow ($query, $user);
+
+    $userData = json_decode ($row ['acval'], true);
+
+    $hashpwd = sha1 ($newpassword . $this->salt);
+    $userData ['hpassword'] = $hashpwd;
+
+    $userDataS = json_encode ($userData);
+    
+    $query = "UPDATE ac_data SET acval=? WHERE actype='user' AND ackey=?";
+
+    $params = [
+        $userDataS, $user
+    ];
+
+    $db->doQuery ($query, $params);
+
+} // end functionchangePassword ($user, $newpassword)
 
 
 } // end class User
