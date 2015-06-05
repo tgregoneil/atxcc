@@ -61,20 +61,29 @@ class Topics {
     //---------------------
     function topicsShowContent ($topics) {
 
+        $stopics = [];
+
         foreach ($topics as $topic) {
             
-            $items = $this->convTitle ($topic ['post_title']);
+            $this->convTitle ($topic);
+            array_push ($stopics, $topic);
+
+        } // end foreach ($topics as $topic)
+
+        usort ($stopics, array ('Topics', 'cmpTopics'));
+
+        foreach ($stopics as $topic) {
 
             ?>
             <tr class='ztopicsrow'> 
                 <td class='zdate'> 
                     <?php 
-                        echo ($items [1]);
+                        echo ($topic ['ddate']);
                     ?>
                 </td>
                 <td class='zitem'> 
                     <?php 
-                        echo ($items [0]);
+                        echo ($topic ['item']);
                     ?>
                 </td>
                 <td class='zcontent'> 
@@ -87,11 +96,19 @@ class Topics {
 
     } // end topicsShowContent ($topics)
 
+    
+    //---------------------
+    private function cmpTopics ($topic1, $topic2) {
+
+        return $topic1 ['sdate'] < $topic2 ['sdate'];
+
+    } // end cmpTopics ()
+
     //---------------------
     function getTopics () {
 
         global $atxcc_db;
-        //$query = "SELECT post_title, post_content FROM wp_posts WHERE post_status='publish' AND post_type='topic' LIMIT 10";
+        //$query = "SELECT post_title, post_content FROM wp_posts WHERE post_status='publish' AND post_type='topic' LIMIT 5";
         $query = "SELECT post_title, post_content FROM wp_posts WHERE post_status='publish' AND post_type='topic'";
         $rows = $atxcc_db -> doQuery ($query);
 
@@ -116,7 +133,9 @@ class Topics {
     } // end getTopicsSearch (keyword)
 
     //---------------------
-    function convTitle ($rawTitle) {
+    function convTitle (&$topic) {
+
+        $rawTitle = $topic ['post_title'];
 
         if (preg_match ('/Item\s+(\d+)\s+\-\s+(\w+)\s+(\d+),\s*(\d+)/', $rawTitle, $matches)) {
 
@@ -147,16 +166,22 @@ class Topics {
             $day = sprintf ('%02d', $day);
             $year = substr ($year, 2, 2);
 
-            $items = [$itemNo, $monthInt . '/' . $day . '/' . $year];
+            // $items = [$itemNo, $monthInt . '/' . $day . '/' . $year];
+            $topic ['item'] = $itemNo;
+            $topic ['ddate'] = $monthInt . '/' . $day . '/' . $year;
+            $topic ['sdate'] = $year . $monthInt . $day . sprintf ('%03d', 1000 - $itemNo);
 
         } else {
 
-            $items = [$rawTitle, ""];
+            //$items = [$rawTitle, ""];
+            $topic ['item'] = '';
+            $topic ['ddate'] = '';
+            $topic ['sdate'] = '';
 
         } // end if (preg_match ())
-        
-        return $items;
 
+        return $topic;
+        
     } // end convTitle ($rawTitle)
 
 

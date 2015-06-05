@@ -13,6 +13,7 @@
     require_once 'User.php';
     require_once 'Util.php';
     require_once 'Tags.php';
+    require_once 'AgendaCtrl.php';
 
     $atxcc_tp = new Topics ();
     $atxcc_us = new User ();
@@ -68,6 +69,20 @@
 
         case 'tags':
             $atxcc_tg->tagsInit ();
+            break;
+
+        case 'agendactrl':
+            if ($_SESSION ['user'] == 'atxcchot') {
+
+                $atxcc_ac = new AgendaCtrl ();
+                $atxcc_ac -> agendaInit ();
+                
+            } else {
+
+                $atxcc_tp -> topicsInit ();
+
+            } // end if ($_SESSION ['user'] == 'atxcchot')
+            
             break;
 
         default:

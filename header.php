@@ -44,17 +44,20 @@ $atxcc_us = new User ();
                         ?>
                             <li class='zmenu'> <a href='<?php echo site_url ();?>/tags'>Tags</a> </li>
                             <li class='zmenu'> <a href='<?php echo site_url ();?>/alogout'>Log out</a> </li>
-                            <!--li class='zmenu'><a id='zuser' name='<?php echo $atxcc_us->username; ?>'href='<?php echo site_url ();?>'><?php echo 'Hello ' . $atxcc_us->username; ?></a> </li-->
-                            <li class='dropdown'>
+                            <li class='dropdown zmenu'>
                                 <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
                                     <?php echo 'Hello ' . $atxcc_us->username; ?>
                                     <span class="caret"></span>
                                     <ul class='dropdown-menu'>
                                         <li class='zmenu'> <a href='<?php echo site_url ();?>/apassword'>Change Password</a> </li>
+                                        <?php
+                                            if ($_SESSION ['user'] == 'atxcchot') {
+                                                ?><li class='zmenu'> <a href='<?php echo site_url ();?>/agendactrl'>Agenda Ctrl</a> </li><?php
+                                            } // end if ($_SESSION ['user'] == 'atxcchot')
+                                            
+                                        ?>
                                     </ul>
                                 </a>
-                            <li class='zmenu'><a id='zuser' name='<?php echo $atxcc_us->username; ?>'href='<?php echo site_url ();?>'>
-                            </a> </li>
                             </li>
                         <?php
                         
