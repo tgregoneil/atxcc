@@ -44,7 +44,7 @@ $atxcc_us = new User ();
                         ?>
                             <li class='zmenu'> <a href='<?php echo site_url ();?>/tags'>Tags</a> </li>
                             <li class='zmenu'> <a href='<?php echo site_url ();?>/alogout'>Log out</a> </li>
-                            <li class='dropdown zmenu'>
+                            <li id='zuser' name='<?php echo $atxcc_us->username; ?>' class='dropdown zmenu'>
                                 <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
                                     <?php echo 'Hello ' . $atxcc_us->username; ?>
                                     <span class="caret"></span>

@@ -287,6 +287,22 @@ agendaSearch: function () {    $atxcc._dg.debug ({})
 
 
 //---------------------
+doNotify: function (agendaItem, content) {    $atxcc._dg.debug ({agendaItem: agendaItem, content: content})
+    
+    $.post ('wp-content/themes/atxcc/notify.php', {agendaItem: agendaItem, content: content}, function (data) {
+    //ut.dumpOb ('data', data)
+        /*
+        $('#agendasection')
+        .prepend (data)
+        */
+        alert (data);
+    })
+
+}, // doNotify: function ()
+
+
+
+//---------------------
 keywordDoRegister: function (keyword, username) {    $atxcc._dg.debug ({keyword: keyword, username: username})
     
     var formData = $('#zregisterform').serializeArray()

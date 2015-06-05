@@ -167,19 +167,68 @@ public function logout () {
 } // end function logout ()
 
 //---------------------
-public function userExists ($username) {
+public function getIdx ($username) {
 
     $db = new Database ('tgregone_atxcc', 'tgregone_atxcc', 'tgregone_atxcc$', 'localhost');
 
-    $query = 'SELECT ackey FROM ac_data WHERE actype="user" AND ackey=?';
+    $query = 'SELECT idx FROM ac_data WHERE actype="user" AND ackey=?';
     $row = $db -> doQueryRow ($query, $username);
 
-    $userexists = ! empty ($row);
+    $idx = empty ($row) ? 0 : $row ['idx'];
 
-    return $userexists;
+    return $idx;
 
-} // end userExists ($username)
+} // end getIdx ($username)
 
+
+
+//---------------------
+public function getUsername ($idx) {
+
+    $db = new Database ('tgregone_atxcc', 'tgregone_atxcc', 'tgregone_atxcc$', 'localhost');
+
+    $query = 'SELECT ackey FROM ac_data WHERE idx=?';
+    $row = $db -> doQueryRow ($query, $idx);
+
+    $username = empty ($row) ? '' : $row ['ackey'];
+
+    return $username;
+
+} // end getUsername ($idx)
+
+//---------------------
+public function getMobile ($idx) {
+
+    $db = new Database ('tgregone_atxcc', 'tgregone_atxcc', 'tgregone_atxcc$', 'localhost');
+
+    $query = 'SELECT acval FROM ac_data WHERE idx=?';
+    $row = $db -> doQueryRow ($query, $idx);
+
+    $userDataS = $row ['acval'];
+    $userData = json_decode ($userDataS, true);
+
+    $mobile = $userData ['mobile'];
+
+    return $mobile;
+
+} // end getMobile ($idx)
+
+//---------------------
+public function getEmail ($idx) {
+
+    $db = new Database ('tgregone_atxcc', 'tgregone_atxcc', 'tgregone_atxcc$', 'localhost');
+
+    $query = 'SELECT acval FROM ac_data WHERE idx=?';
+    $row = $db -> doQueryRow ($query, $idx);
+
+    $userDataS = $row ['acval'];
+    $userData = json_decode ($userDataS, true);
+
+    $email = $userData ['email'];
+
+    return $email;
+
+} // end getEmail ($idx)
 
 //---------------------
 public function registerUser ($username, $password, $email, $mobile) {

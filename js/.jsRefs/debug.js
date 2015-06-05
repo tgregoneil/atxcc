@@ -52,6 +52,7 @@ scope: {
         keywordSearch: 0,
         keywordRegister: 0,
         agendaSearch: 0,
+        doNotify: 0,
         keywordDoRegister: 0,
         insertAlerts: 0,
     },

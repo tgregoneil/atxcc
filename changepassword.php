@@ -28,7 +28,7 @@ if ($_POST) {
 
         $atxcc_us -> changePassword ($_SESSION ['user'], $password);
 
-    } // end if ($atxcc_us -> userExists ($username))
+    } // end if ($password !== $cpassword)
     
     $_SESSION ['err'] = $err;
 

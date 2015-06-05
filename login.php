@@ -19,7 +19,7 @@ if ($_POST) {
     $server = $_SERVER ['SERVER_NAME'];
     $urlRedirect = 'http://' . $server . '/atxcc';
 
-    if (! $atxcc_us -> userExists ($username)) {
+    if (! $atxcc_us -> getIdx ($username)) {
 
         $err = "user: '$username' does not exist";
         $urlRedirect = $urlRedirect . '/alogin';
@@ -33,7 +33,7 @@ if ($_POST) {
 
         $_SESSION ['user'] = $username;
 
-    } // end if ($atxcc_us -> userExists ($username))
+    } // end if ($atxcc_us -> getIdx ($username))
     
     $_SESSION ['err'] = $err;
 
