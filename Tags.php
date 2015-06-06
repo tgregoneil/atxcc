@@ -160,19 +160,47 @@ public function tagsNotify ($user, $agendaItem, $content) {
 //---------------------
 public function tagsNotifyText ($mobileTags, $agendaItem, $content) {
 
-    $msgs = [];
+    $AccountSid = "AC493f9987eac70cfdca386037c4a09423";
+    $AuthToken = "78ca1ef4c9460df1e7389c4725eb3371";
+$f = fopen ('f.txt', 'w');
+
+    $msgsPrepared = "";
+
+$fv = "\n" . '$mobileTags: ';
+fwrite ($f, $fv . json_encode($mobileTags));
 
     foreach ($mobileTags as $tag => $numbers) {
 
+$fv = "\n" . '$tag: ';
+fwrite ($f, $fv . json_encode($tag));
+
+$fv = "\n" . '$numbers: ';
+fwrite ($f, $fv . json_encode($numbers));
+
+$fv = "\n" . '$content: ';
+fwrite ($f, $fv . json_encode($content));
+
         if (preg_match ("/$tag/i", $content)) {
 
-            $didMatch = true;
             foreach ($numbers as $number) {
     
-                $res = $tag . ' ' . $number . ' ' . $agendaItem . "\n";
-                $txtmsg = 'atxcc notify ' . $res;
+                $msg = $tag . ' ' . $agendaItem . "\n";
+  $fv = "\n" . '$msg: ';
+  fwrite ($f, $fv . json_encode($msg));
 
-                array_push ($msgs, ['From' => '512-309-7363', 'To' => $number, 'Body' => $txtmsg]);
+                $msgsPrepared .= $msg;
+                $txtmsg = 'atxcc notify ' . $msg;
+                $sms = array ('From' => '512-309-7363', 'To' => $number, 'Body' => $txtmsg);
+  $fv = "\n" . '$sms: ';
+  fwrite ($f, $fv . json_encode($sms));
+
+
+                $client = new Services_Twilio($AccountSid, $AuthToken);
+                $message = $client->account->messages->create($sms);
+                $res = "Sent message {$message->sid}";
+  $fv = "\n" . '$res: ';
+  fwrite ($f, $fv . json_encode($res));
+
 
             } // end foreach ($numbers as $number)
 
@@ -180,45 +208,15 @@ public function tagsNotifyText ($mobileTags, $agendaItem, $content) {
 
     } // end foreach ($mobileTags as $mobileTag)
 
-$f = fopen ('f.txt', 'w');
-fwrite ($f, json_encode($msgs));
-    if (empty ($msgs)) {
+    if ($msgsPrepared == "") {
 
-        echo 'NO tags matched for this item';
+        echo 'NO tags matched for item: ' . $agendaItem;
 
     } else {
         
-fwrite ($f, json_encode('sending msgs ...'));
-
-
-        foreach ($msgs as $msg) {
-
-            $client = new Services_Twilio($AccountSid, $AuthToken);
-            $message = $client->account->messages->create($msg);
-            echo "Sent message {$message->sid}";
-
-$res = "Sent message {$message->sid}";
-fwrite ($f, json_encode($res));
-        } // end foreach ($msgs as as $msg)
-        
-/*
-$message = $client->account->messages->create(array(
-"From" => "512-309-7363",
-"To" => "714-337-2726",
-"Body" => "Hacker awesomeness TODAY!",
-));
-*/
-
-
-
+        echo $msgsPrepared;
 
     } // end if (empty ($msgs))
-    
-    if (! $didMatch) {
-
-
-    } // end if (! $didMatch)
-    
     
 
 } // end tagsNotifyText ($mobileTags, $content)
