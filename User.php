@@ -54,6 +54,7 @@ public function signupForm ($err_msg) {
                 </label>
                 <br>
                 <input id="zpassword" type="password" placeholder="password" name="password"/>
+                <br>
                 <label>
                     Email address
                 </label>
